@@ -11,6 +11,9 @@ class User {
   name: string;
 
   @Column()
+  user_type: number
+
+  @Column()
   email: string;
 
   @Column()
