@@ -6,13 +6,14 @@ import AppError from '../errors/AppError';
 interface Request {
   user_id: string,
   name: string;
+  summary: string;
   description: string;
   link: string
 }
 
 class CreateApplicationService {
   public async execute({
-    user_id, name, description, link,
+    user_id, name, summary, description, link,
   }: Request): Promise<Application> {
     const applicationsRepository = getRepository(Application);
     const findApplicationWithSameName = await applicationsRepository.findOne({ where: { name } });
@@ -24,6 +25,7 @@ class CreateApplicationService {
     const application = applicationsRepository.create({
       user_id,
       name,
+      summary,
       description,
       link,
     });

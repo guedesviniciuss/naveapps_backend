@@ -23,6 +23,9 @@ class Application {
   name: string;
 
   @Column()
+  summary: string;
+
+  @Column()
   description: string;
 
   @Column()

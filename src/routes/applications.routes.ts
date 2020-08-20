@@ -22,7 +22,7 @@ applicationsRouter.get('/', async (request, response) => {
 
 applicationsRouter.post('/', ensureAuthenticated, async (request, response) => {
   const {
-    name, description, link,
+    name, description, summary, link,
   } = request.body;
 
   const createApplication = new CreateApplicationService();
@@ -30,6 +30,7 @@ applicationsRouter.post('/', ensureAuthenticated, async (request, response) => {
   const application = await createApplication.execute({
     user_id: request.user.id,
     name,
+    summary,
     description,
     link,
   });
