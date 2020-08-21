@@ -1,6 +1,8 @@
 import multer from 'multer';
 import { Router } from 'express';
+import { getRepository } from 'typeorm';
 
+import Application from '../models/Application';
 import CreateApplicationService from '../services/CreateApplicationService';
 import ListApplicationsService from '../services/ListApplicationsService';
 import UpdateThumbnailService from '../services/UpdateThumbnailService';
@@ -22,6 +24,16 @@ applicationsRouter.get('/', async (request, response) => {
   const applications = await listApplications.execute({ name: query });
 
   return response.status(200).json(applications);
+});
+
+applicationsRouter.get('/:name', async (request, response) => {
+  const { name } = request.params;
+
+  const applicationsRepository = getRepository(Application);
+
+  const application = await applicationsRepository.findOne({ name });
+
+  return response.status(200).json(application);
 });
 
 applicationsRouter.post('/', ensureAuthenticated, async (request, response) => {
