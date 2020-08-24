@@ -1,6 +1,8 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn,
+  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, ManyToOne,
 } from 'typeorm';
+
+import Profile from './Profile';
 
 @Entity('users')
 class User {
@@ -11,7 +13,11 @@ class User {
   name: string;
 
   @Column()
-  user_type: number
+  user_profile: number
+
+  @ManyToOne(() => Profile)
+  @JoinColumn({ name: 'user_profile' })
+  profile: Profile;
 
   @Column()
   email: string;
