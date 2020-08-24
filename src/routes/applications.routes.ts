@@ -4,6 +4,7 @@ import { getRepository } from 'typeorm';
 
 import Application from '../models/Application';
 import CreateApplicationService from '../services/CreateApplicationService';
+import DeleteApplicationService from '../services/DeleteApplicationService';
 import ListApplicationsService from '../services/ListApplicationsService';
 import UpdateThumbnailService from '../services/UpdateThumbnailService';
 
@@ -68,6 +69,14 @@ applicationsRouter.patch('/thumbnail/:id', ensureAuthenticated, uploadThumbnail.
   );
 
   return response.json(application);
+});
+
+applicationsRouter.delete('/:id', async (request, response) => {
+  const { id } = request.params;
+
+  const deleteApplication = new DeleteApplicationService();
+  await deleteApplication.execute(id);
+  return response.status(204).send();
 });
 
 export default applicationsRouter;
