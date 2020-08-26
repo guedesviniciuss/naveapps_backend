@@ -2,6 +2,8 @@ import multer from 'multer';
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
 
+import userLevel from '../config/permissions';
+
 import Application from '../models/Application';
 import CreateApplicationService from '../services/CreateApplicationService';
 import DeleteApplicationService from '../services/DeleteApplicationService';
@@ -9,6 +11,8 @@ import ListApplicationsService from '../services/ListApplicationsService';
 import UpdateThumbnailService from '../services/UpdateThumbnailService';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import { ensureMinimumLevelPermission } from '../middlewares/ensureLevelPermission';
+
 import uploadConfig from '../config/uploadConfig';
 
 const applicationsRouter = Router();
@@ -71,7 +75,7 @@ applicationsRouter.patch('/thumbnail/:id', ensureAuthenticated, uploadThumbnail.
   return response.json(application);
 });
 
-applicationsRouter.delete('/:id', async (request, response) => {
+applicationsRouter.delete('/:id', ensureAuthenticated, ensureMinimumLevelPermission(userLevel.permission.ADMIN), async (request, response) => {
   const { id } = request.params;
 
   const deleteApplication = new DeleteApplicationService();

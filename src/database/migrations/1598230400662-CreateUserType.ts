@@ -11,8 +11,6 @@ export default class CreateUserType1598230400662 implements MigrationInterface {
           name: 'id',
           type: 'integer',
           isPrimary: true,
-          // isGenerated: true,
-          // generationStrategy: 'increment',
         },
         {
           name: 'description',
