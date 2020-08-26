@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "setup": "ts-node-dev src/scripts/createAdmin",
     "build": "tsc",
     "dev:server": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
@@ -30,6 +31,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "minimist": "^1.2.5",
     "multer": "^1.4.2",
     "pg": "^8.3.0",
     "reflect-metadata": "^0.1.13",
