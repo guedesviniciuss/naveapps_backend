@@ -1,4 +1,7 @@
 import { Router } from 'express';
+import { getRepository } from 'typeorm';
+
+import User from '../models/User';
 
 import CreateUserService from '../services/CreateUserService';
 import AuthorizeUserService from '../services/AuthorizeUserService';
@@ -9,6 +12,16 @@ import { ensureMinimumLevelPermission } from '../middlewares/ensureLevelPermissi
 import userLevel from '../config/permissions';
 
 const usersRouter = Router();
+
+usersRouter.get('/', ensureAuthenticated,
+  ensureMinimumLevelPermission(userLevel.permission.ADMIN),
+  async (request, response) => {
+    const usersRepository = getRepository(User);
+
+    const users = await usersRepository.find();
+
+    return response.json(users);
+  });
 
 usersRouter.post('/', async (request, response) => {
   const {
