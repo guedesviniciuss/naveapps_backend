@@ -33,6 +33,10 @@ class AuthenticateUserService {
       throw new AppError('Incorrect email/password combination', 401);
     }
 
+    if (!user.status) {
+      throw new AppError('User is not yet authorized', 401);
+    }
+
     const { secret, expiresIn } = authConfig.jwt;
 
     const token = sign({

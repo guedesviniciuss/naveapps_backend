@@ -20,6 +20,9 @@ class User {
   profile: Profile;
 
   @Column()
+  status: boolean;
+
+  @Column()
   email: string;
 
   @Column()

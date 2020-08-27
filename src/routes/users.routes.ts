@@ -1,5 +1,12 @@
 import { Router } from 'express';
+
 import CreateUserService from '../services/CreateUserService';
+import AuthorizeUserService from '../services/AuthorizeUserService';
+
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import { ensureMinimumLevelPermission } from '../middlewares/ensureLevelPermission';
+
+import userLevel from '../config/permissions';
 
 const usersRouter = Router();
 
@@ -21,5 +28,17 @@ usersRouter.post('/', async (request, response) => {
 
   return response.json(user);
 });
+
+usersRouter.post('/authorize/:id',
+  ensureAuthenticated,
+  ensureMinimumLevelPermission(userLevel.permission.ADMIN),
+  async (request, response) => {
+    const { id } = request.params;
+
+    const authorizeUser = new AuthorizeUserService();
+    const user = authorizeUser.execute(id);
+
+    return response.json(user);
+  });
 
 export default usersRouter;

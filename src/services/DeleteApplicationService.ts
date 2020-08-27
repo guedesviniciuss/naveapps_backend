@@ -1,4 +1,5 @@
 import { getRepository } from 'typeorm';
+
 import Application from '../models/Application';
 
 import AppError from '../errors/AppError';
@@ -9,7 +10,7 @@ class DeleteApplicationService {
     const application = await applicationsRepository.findOne(id);
 
     if (!application) {
-      throw new AppError('Application do not exists');
+      throw new AppError('Application does not exist');
     }
 
     await applicationsRepository.remove(application);
