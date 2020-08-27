@@ -9,6 +9,7 @@ import CreateApplicationService from '../services/CreateApplicationService';
 import DeleteApplicationService from '../services/DeleteApplicationService';
 import ListApplicationsService from '../services/ListApplicationsService';
 import UpdateThumbnailService from '../services/UpdateThumbnailService';
+import IncrementLikeInApplicationService from '../services/IncrementLikeInApplicationService';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 import { ensureMinimumLevelPermission } from '../middlewares/ensureLevelPermission';
@@ -56,6 +57,15 @@ applicationsRouter.post('/', ensureAuthenticated, async (request, response) => {
     link,
   });
 
+  return response.json(application);
+});
+
+applicationsRouter.post('/likes/:id', async (request, response) => {
+  const { id } = request.params;
+
+  const incrementLikeInApplication = new IncrementLikeInApplicationService();
+
+  const application = await incrementLikeInApplication.execute(id);
   return response.json(application);
 });
 
