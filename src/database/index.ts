@@ -11,7 +11,7 @@ createConnection().then(() => getConnection()
   .onConflict('("id") DO NOTHING')
   .values([
     { id: userLevel.permission.NORMAL_USER, description: 'NORMAL_USER' },
-    { id: userLevel.permission.MAINTAINER, description: 'MAINTAINER' },
     { id: userLevel.permission.ADMIN, description: 'ADMIN' },
+    { id: userLevel.permission.MAINTAINER, description: 'MAINTAINER' },
   ])
   .execute());
