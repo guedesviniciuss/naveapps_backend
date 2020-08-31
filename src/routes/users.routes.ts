@@ -5,6 +5,7 @@ import User from '../models/User';
 
 import CreateUserService from '../services/CreateUserService';
 import AuthorizeUserService from '../services/AuthorizeUserService';
+import UnauthorizeUserService from '../services/UnauthorizeUserService';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 import { ensureMinimumLevelPermission } from '../middlewares/ensureLevelPermission';
@@ -53,5 +54,14 @@ usersRouter.post('/authorize/:id',
 
     return response.json(user);
   });
+
+usersRouter.post('/unauthorize/:id', async (request, response) => {
+  const { id } = request.params;
+
+  const unauthorizeUser = new UnauthorizeUserService();
+  const user = unauthorizeUser.execute(id);
+
+  return response.json(user);
+});
 
 export default usersRouter;
