@@ -1,9 +1,7 @@
 import { Router } from 'express';
-import { getRepository } from 'typeorm';
-
-import User from '../models/User';
 
 import CreateUserService from '../services/CreateUserService';
+import ListUserService from '../services/ListUserService';
 import AuthorizeUserService from '../services/AuthorizeUserService';
 import UnauthorizeUserService from '../services/UnauthorizeUserService';
 
@@ -17,9 +15,11 @@ const usersRouter = Router();
 usersRouter.get('/', ensureAuthenticated,
   ensureMinimumLevelPermission(userLevel.permission.ADMIN),
   async (request, response) => {
-    const usersRepository = getRepository(User);
+    const { status } = request.query;
 
-    const users = await usersRepository.find();
+    const listUser = new ListUserService();
+
+    const users = await listUser.execute(status);
 
     return response.json(users);
   });
@@ -55,13 +55,16 @@ usersRouter.post('/authorize/:id',
     return response.json(user);
   });
 
-usersRouter.post('/unauthorize/:id', async (request, response) => {
-  const { id } = request.params;
+usersRouter.post('/unauthorize/:id',
+  ensureAuthenticated,
+  ensureMinimumLevelPermission(userLevel.permission.ADMIN),
+  async (request, response) => {
+    const { id } = request.params;
 
-  const unauthorizeUser = new UnauthorizeUserService();
-  const user = unauthorizeUser.execute(id);
+    const unauthorizeUser = new UnauthorizeUserService();
+    const user = unauthorizeUser.execute(id);
 
-  return response.json(user);
-});
+    return response.json(user);
+  });
 
 export default usersRouter;
