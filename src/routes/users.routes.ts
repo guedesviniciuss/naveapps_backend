@@ -19,7 +19,7 @@ usersRouter.get('/', ensureAuthenticated,
 
     const listUser = new ListUserService();
 
-    const users = await listUser.execute(status);
+    const users = await listUser.execute(status as string);
 
     return response.json(users);
   });

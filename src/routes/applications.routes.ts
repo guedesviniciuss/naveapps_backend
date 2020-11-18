@@ -20,14 +20,18 @@ const applicationsRouter = Router();
 
 const uploadThumbnail = multer(uploadConfig);
 
-applicationsRouter.get('/', async (request, response) => {
+applicationsRouter.get('/', ensureAuthenticated, async (request, response) => {
   const { name } = request.query;
 
-  const query: string = name!;
+  const query: string = name as string;
 
   const listApplications = new ListApplicationsService();
 
-  const applications = await listApplications.execute({ name: query });
+  const applications = await listApplications.execute({
+    id: request.user.id,
+    authorizationLevel: request.user.authorization,
+    name: query,
+  });
 
   return response.status(200).json(applications);
 });
@@ -85,12 +89,14 @@ applicationsRouter.patch('/thumbnail/:id', ensureAuthenticated, uploadThumbnail.
   return response.json(application);
 });
 
-applicationsRouter.delete('/:id', ensureAuthenticated, ensureMinimumLevelPermission(userLevel.permission.ADMIN), async (request, response) => {
-  const { id } = request.params;
+applicationsRouter.delete('/:id',
+  ensureAuthenticated,
+  ensureMinimumLevelPermission(userLevel.permission.ADMIN), async (request, response) => {
+    const { id } = request.params;
 
-  const deleteApplication = new DeleteApplicationService();
-  await deleteApplication.execute(id);
-  return response.status(204).send();
-});
+    const deleteApplication = new DeleteApplicationService();
+    await deleteApplication.execute(id);
+    return response.status(204).send();
+  });
 
 export default applicationsRouter;
