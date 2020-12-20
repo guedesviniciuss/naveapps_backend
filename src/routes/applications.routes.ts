@@ -46,7 +46,7 @@ applicationsRouter.get('/:name', async (request, response) => {
   return response.status(200).json(application);
 });
 
-applicationsRouter.post('/', ensureAuthenticated, async (request, response) => {
+applicationsRouter.post('/', ensureAuthenticated, uploadThumbnail.single('file'), async (request, response) => {
   const {
     name, description, summary, link,
   } = request.body;
@@ -100,3 +100,7 @@ applicationsRouter.delete('/:id',
   });
 
 export default applicationsRouter;
+
+// [  ] RECEBER IMAGENS PARA A GALERIA
+// [  ] SALVAR NO BANCO
+// [  ] SERVIR PARA O FRONT OS LINKS DAS IMAGENS ESTATICAS
