@@ -18,7 +18,7 @@ import uploadConfig from '../config/uploadConfig';
 
 const applicationsRouter = Router();
 
-const uploadThumbnail = multer(uploadConfig);
+const uploadImage = multer(uploadConfig);
 
 applicationsRouter.get('/', ensureAuthenticated, async (request, response) => {
   const { name } = request.query;
@@ -46,7 +46,7 @@ applicationsRouter.get('/:name', async (request, response) => {
   return response.status(200).json(application);
 });
 
-applicationsRouter.post('/', ensureAuthenticated, uploadThumbnail.single('file'), async (request, response) => {
+applicationsRouter.post('/', ensureAuthenticated, uploadImage.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'gallery', maxCount: 3 }]), async (request, response) => {
   const {
     name, description, summary, link,
   } = request.body;
@@ -59,6 +59,8 @@ applicationsRouter.post('/', ensureAuthenticated, uploadThumbnail.single('file')
     summary,
     description,
     link,
+    thumbnail: request.files.thumbnail[0].filename,
+
   });
 
   return response.json(application);
@@ -73,7 +75,7 @@ applicationsRouter.post('/likes/:id', async (request, response) => {
   return response.json(application);
 });
 
-applicationsRouter.patch('/thumbnail/:id', ensureAuthenticated, uploadThumbnail.single('file'), async (request, response) => {
+applicationsRouter.patch('/thumbnail/:id', ensureAuthenticated, uploadImage.single('thumbnail'), async (request, response) => {
   const { id } = request.params;
   const user_id = request.user.id;
 
