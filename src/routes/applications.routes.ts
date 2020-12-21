@@ -52,6 +52,9 @@ applicationsRouter.post('/', ensureAuthenticated, uploadImage.fields([{ name: 't
   } = request.body;
 
   const createApplication = new CreateApplicationService();
+  // eslint-disable-next-line prefer-const
+  let galleryArray = [];
+  request.files.gallery.forEach((i) => galleryArray.push(i.filename));
 
   const application = await createApplication.execute({
     user_id: request.user.id,
@@ -59,8 +62,8 @@ applicationsRouter.post('/', ensureAuthenticated, uploadImage.fields([{ name: 't
     summary,
     description,
     link,
-    thumbnail: request.files.thumbnail[0].filename,
-
+    thumbnail: request.files?.thumbnail[0]?.filename,
+    galleryArray,
   });
 
   return response.json(application);
@@ -103,6 +106,6 @@ applicationsRouter.delete('/:id',
 
 export default applicationsRouter;
 
-// [  ] RECEBER IMAGENS PARA A GALERIA
-// [  ] SALVAR NO BANCO
+// [ X ] RECEBER IMAGENS PARA A GALERIA
+// [ X ] SALVAR NO BANCO
 // [  ] SERVIR PARA O FRONT OS LINKS DAS IMAGENS ESTATICAS

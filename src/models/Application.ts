@@ -20,6 +20,9 @@ class Application {
   thumbnail: string;
 
   @Column()
+  gallery: string;
+
+  @Column()
   name: string;
 
   @Column()

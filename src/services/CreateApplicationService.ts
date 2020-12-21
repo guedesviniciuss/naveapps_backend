@@ -12,11 +12,12 @@ interface Request {
   description: string;
   link: string;
   thumbnail: string;
+  galleryArray: Array<string>;
 }
 
 class CreateApplicationService {
   public async execute({
-    user_id, name, summary, description, link, thumbnail,
+    user_id, name, summary, description, link, thumbnail, galleryArray,
   }: Request): Promise<Application> {
     const applicationsRepository = getRepository(Application);
     const findApplicationWithSameName = await applicationsRepository.findOne({ where: { name } });
@@ -30,7 +31,8 @@ class CreateApplicationService {
     }
 
     const thumbnailApplicationFilePath = path.join(uploadConfig.directory, thumbnail);
-
+    const galleryStr = galleryArray.toString();
+    const gallery = galleryStr.replace(/,/g, '/');
     const application = applicationsRepository.create({
       user_id,
       name,
@@ -38,6 +40,7 @@ class CreateApplicationService {
       description,
       link,
       thumbnail: thumbnailApplicationFilePath,
+      gallery,
     });
 
     await applicationsRepository.save(application);
