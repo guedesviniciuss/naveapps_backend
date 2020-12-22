@@ -4,7 +4,7 @@ export default class AddGalleryInApplication1608512774152 implements MigrationIn
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumn('applications', new TableColumn({
       name: 'gallery',
-      type: 'varchar',
+      type: 'text[]',
       isNullable: false,
     }));
   }

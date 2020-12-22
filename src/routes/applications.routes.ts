@@ -20,7 +20,11 @@ const applicationsRouter = Router();
 
 const uploadImage = multer(uploadConfig);
 
-applicationsRouter.get('/', ensureAuthenticated, async (request, response) => {
+interface Index {
+  filename:string;
+}
+
+applicationsRouter.get('/', async (request, response) => {
   const { name } = request.query;
 
   const query: string = name as string;
@@ -28,8 +32,6 @@ applicationsRouter.get('/', ensureAuthenticated, async (request, response) => {
   const listApplications = new ListApplicationsService();
 
   const applications = await listApplications.execute({
-    id: request.user.id,
-    authorizationLevel: request.user.authorization,
     name: query,
   });
 
@@ -53,8 +55,8 @@ applicationsRouter.post('/', ensureAuthenticated, uploadImage.fields([{ name: 't
 
   const createApplication = new CreateApplicationService();
   // eslint-disable-next-line prefer-const
-  let galleryArray = [];
-  request.files.gallery.forEach((i) => galleryArray.push(i.filename));
+  let gallery:Array<string> = [];
+  request.files.gallery.forEach((i:Index) => gallery.push(i.filename));
 
   const application = await createApplication.execute({
     user_id: request.user.id,
@@ -63,7 +65,7 @@ applicationsRouter.post('/', ensureAuthenticated, uploadImage.fields([{ name: 't
     description,
     link,
     thumbnail: request.files?.thumbnail[0]?.filename,
-    galleryArray,
+    gallery,
   });
 
   return response.json(application);

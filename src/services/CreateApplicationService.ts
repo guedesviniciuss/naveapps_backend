@@ -12,12 +12,12 @@ interface Request {
   description: string;
   link: string;
   thumbnail: string;
-  galleryArray: Array<string>;
+  gallery: Array<string>;
 }
 
 class CreateApplicationService {
   public async execute({
-    user_id, name, summary, description, link, thumbnail, galleryArray,
+    user_id, name, summary, description, link, thumbnail, gallery,
   }: Request): Promise<Application> {
     const applicationsRepository = getRepository(Application);
     const findApplicationWithSameName = await applicationsRepository.findOne({ where: { name } });
@@ -31,8 +31,11 @@ class CreateApplicationService {
     }
 
     const thumbnailApplicationFilePath = path.join(uploadConfig.directory, thumbnail);
-    const galleryStr = galleryArray.toString();
-    const gallery = galleryStr.replace(/,/g, '/');
+
+    if (gallery.length < 3) {
+      throw new AppError('Gallery must have 3 photos');
+    }
+
     const application = applicationsRepository.create({
       user_id,
       name,

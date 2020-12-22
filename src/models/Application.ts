@@ -19,8 +19,8 @@ class Application {
   @Column()
   thumbnail: string;
 
-  @Column()
-  gallery: string;
+  @Column('text', { array: true, default: [] })
+  gallery: string[];
 
   @Column()
   name: string;
