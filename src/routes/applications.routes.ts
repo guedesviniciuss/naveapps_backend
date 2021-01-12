@@ -50,7 +50,7 @@ applicationsRouter.get('/:name', async (request, response) => {
 
 applicationsRouter.post('/', ensureAuthenticated, uploadImage.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'gallery', maxCount: 3 }]), async (request, response) => {
   const {
-    name, description, summary, link,
+    name, description, summary, link, video,
   } = request.body;
 
   const createApplication = new CreateApplicationService();
@@ -66,6 +66,7 @@ applicationsRouter.post('/', ensureAuthenticated, uploadImage.fields([{ name: 't
     link,
     thumbnail: request.files?.thumbnail[0]?.filename,
     gallery,
+    video,
   });
 
   return response.json(application);

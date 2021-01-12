@@ -37,6 +37,9 @@ class Application {
   @Column()
   likes: number;
 
+  @Column()
+  video: string;
+
   @CreateDateColumn()
   created_at: Date;
 

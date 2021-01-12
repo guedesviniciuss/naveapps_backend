@@ -12,12 +12,13 @@ interface Request {
   description: string;
   link: string;
   thumbnail: string;
+  video: string;
   gallery: Array<string>;
 }
 
 class CreateApplicationService {
   public async execute({
-    user_id, name, summary, description, link, thumbnail, gallery,
+    user_id, name, summary, description, link, thumbnail, gallery, video,
   }: Request): Promise<Application> {
     const applicationsRepository = getRepository(Application);
     const findApplicationWithSameName = await applicationsRepository.findOne({ where: { name } });
@@ -44,6 +45,7 @@ class CreateApplicationService {
       link,
       thumbnail: thumbnailApplicationFilePath,
       gallery,
+      video,
     });
 
     await applicationsRepository.save(application);
