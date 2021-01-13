@@ -108,7 +108,3 @@ applicationsRouter.delete('/:id',
   });
 
 export default applicationsRouter;
-
-// [ X ] RECEBER IMAGENS PARA A GALERIA
-// [ X ] SALVAR NO BANCO
-// [  ] SERVIR PARA O FRONT OS LINKS DAS IMAGENS ESTATICAS

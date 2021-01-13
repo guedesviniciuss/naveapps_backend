@@ -1,8 +1,6 @@
 import { getRepository } from 'typeorm';
-import path from 'path';
 import Application from '../models/Application';
 
-import uploadConfig from '../config/uploadConfig';
 import AppError from '../errors/AppError';
 
 interface Request {
@@ -31,8 +29,6 @@ class CreateApplicationService {
       throw new AppError('Thumbnail does not exist');
     }
 
-    const thumbnailApplicationFilePath = path.join(uploadConfig.directory, thumbnail);
-
     if (gallery.length < 3) {
       throw new AppError('Gallery must have 3 photos');
     }
@@ -43,7 +39,7 @@ class CreateApplicationService {
       summary,
       description,
       link,
-      thumbnail: thumbnailApplicationFilePath,
+      thumbnail,
       gallery,
       video,
     });
