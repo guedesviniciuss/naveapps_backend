@@ -8,7 +8,7 @@ import Application from '../models/Application';
 import CreateApplicationService from '../services/CreateApplicationService';
 import DeleteApplicationService from '../services/DeleteApplicationService';
 import ListApplicationsService from '../services/ListApplicationsService';
-import ListProprietaryApplicationService from '../services/ListProprietaryApplicationService';
+import ListProprietaryApplicationService from '../services/ListProprietaryApplicationsService';
 import UpdateThumbnailService from '../services/UpdateThumbnailService';
 import IncrementLikeInApplicationService from '../services/IncrementLikeInApplicationService';
 
@@ -40,9 +40,9 @@ applicationsRouter.get('/', async (request, response) => {
 });
 
 applicationsRouter.get('/proprietary', ensureAuthenticated, async (request, response) => {
-  const listApplications = new ListProprietaryApplicationService();
+  const listProprietaryApplications = new ListProprietaryApplicationService();
 
-  const applications = await listApplications.execute({
+  const applications = await listProprietaryApplications.execute({
     userId: request.user.id,
     authorizationLevel: request.user.authorization,
   });
